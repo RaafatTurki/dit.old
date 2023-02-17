@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=OBS Virt Cam
+Comment=OBS Virtual Camera
+TryExec=obs
+Exec=obs --minimize-to-tray --startvirtualcam
+Icon=obs
+Terminal=false
+Type=Application
+Categories=Qt
