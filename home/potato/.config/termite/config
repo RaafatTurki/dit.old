@@ -1,0 +1,40 @@
+[options]
+# font = Material Design Icons 10
+# font = Terminus 13
+font = Cozette 10
+# font = Iosevka Term 11
+
+allow_bold = true
+audible_bell = true
+bold_is_bright = true
+clickable_url = true
+dynamic_title = true
+scrollback_lines = 10000
+urgent_on_bell = true
+hyperlinks = true
+cursor_shape = underline
+
+
+[colors]
+background        = #0D0E15
+foreground        = #F1F7ED
+foreground_bold   = #FFFFFF
+cursor            = #ABAECF
+
+color0            = #252550
+color1            = #D7263D
+color2            = #B0DB43
+color3            = #FFAE03
+color4            = #0061FE
+color5            = #F53385
+color6            = #3FA7D6
+color7            = #FFFFFF
+
+color8            = #353570
+color9            = #E7365D
+color10           =	#C0EB63
+color11           =	#FFBE23
+color12           =	#1071FE
+color13           =	#F543A5
+color14           =	#4FB7F6
+color15           =	#FFFFFF

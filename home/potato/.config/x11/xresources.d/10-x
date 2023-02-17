@@ -1,0 +1,4 @@
+! vim: filetype=xdefaults:commentstring=!%s
+
+Xft.dpi:            DPI
+Xft.antialias:      true
