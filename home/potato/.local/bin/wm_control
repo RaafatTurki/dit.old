@@ -1,0 +1,72 @@
+#!/usr/bin/bash
+
+FONT="$(xgetres g.fn_tui):pixelsize=$(xgetres g.fs_tui)"
+BG=$(xgetres g.bg)
+FG=$(xgetres g.sel)
+TIME=${2:-1}
+
+PIDS=$(pgrep umess)
+[ ! -z "$PIDS" ] && kill $PIDS
+
+STRING=""
+case $1 in
+  -t|--time)
+    STRING=`date '+%a %d %b %I:%M:%S %p'`
+    ;;
+  -d|--desktop)
+    STRING=`herbstclient tag_status ${DISPLAY:1}`
+    ;;
+  -bu|--backlight-up)
+    backlight change +20
+    STRING=`backlight`
+    ;;
+  -bd|--backlight-down)
+    backlight change -20
+    STRING=`backlight`
+    ;;
+  -au|--audio-volume-up)
+    pactl set-sink-volume @DEFAULT_SINK@ +10%
+    STRING=`pactl get-sink-volume @DEFAULT_SINK@ pactl | head -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'`
+    ;;
+  -ad|--audio-volume-down)
+    pactl set-sink-volume @DEFAULT_SINK@ -10%
+    STRING=`pactl get-sink-volume @DEFAULT_SINK@ pactl | head -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'`
+    ;;
+  -m|--audio-mute)
+    STRING=`pactl get-sink-mute @DEFAULT_SINK@ toggle`
+    ;;
+esac
+
+# (echo $STRING; sleep $TIME) | umess -t -f $FONT -F $FG -B $BG
+(echo $STRING; sleep $TIME) | umess -t -f $FONT -F $FG -B $BG
+# (echo $STRING; sleep $TIME) | umess -t -f $FONT -m $MON -F $FG -B $BG 
+# (echo $STRING; sleep $TIME) | umess -b -f $FONT -m $MON -F $FG -B $BG 
+# (echo $STRING; sleep $TIME) | umess -t -r -f $FONT -m $MON -F $FG -B $BG 
+# notify-send -r 1000 -t 300 -p "$STRING"
+# notify-send -r 9999 -t 1000 "$STRING"
+
+# -d|--desktop)
+#   all_desktops=`bspc query -D --names`
+#   curr_desktop=`bspc query -D -d focused --names`
+#
+#   STRING=""
+#   for desktop in $all_desktops; do
+#     win_count=`bspc query -N -d $desktop -n .window | wc -l`
+#     if [[ win_count -eq 0 ]]; then
+#       win_count="_"
+#     fi
+#
+#     if [ $desktop == $curr_desktop ]; then
+#       STRING+="[$win_count]"
+#     else
+#       STRING+=" $win_count "
+#     fi
+#   done
+#   echo $STRING
+#   ;;
+# # -ba|--battery)
+# #   STRING=`acpi | perl -ne "/^Battery \d*: ([A-Za-z]{3})[a-z]*, (\d+%), (\d+:\d+):\d+/ && printf \"%s %s | rem %s\", lc \$1, \$2, \$3"`
+# #   ;;
+# -l|--language)
+#   STRING=`setxkbmap -query | perl -ne "/^layout:\s*([A-Za-z]+)$/ && print \$1"`
+#   ;;

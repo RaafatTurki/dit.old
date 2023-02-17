@@ -1,0 +1,156 @@
+#!/bin/sh
+# DEPS:
+# $EDITOR or nvim (changeable at $OP definition)
+# fzf
+# bat (optional)
+
+# setting default values for args and flags
+PROJECT_TYPE='dots'
+# QUERY=""
+QUERIES=()
+# OP=${EDITOR:-nvim}
+
+SELECTION_NULL_GUARD=true
+
+# start parsing flags from the 2nd arg and onwards if the 1st arg doesn't start with a "-"
+if [ ! ${1:0:1} = '-' ]; then
+  OPTIND=2
+  PROJECT_TYPE=$1
+fi
+
+# parsing flags
+while getopts "q:o:" FLAG; do
+  case "$FLAG" in
+    q) QUERIES+=($OPTARG);;
+    # o) OP=$OPTARG;;
+  esac
+done
+
+QUERY_INDEX=0
+get_query() {
+  echo ${QUERIES[$QUERY_INDEX]}
+  QUERY_INDEX=$(($QUERY_INDEX+1))
+}
+
+fzf_fancy() {
+  if [ -z `command -v bat` ]; then
+    PREVIEW="cat {} -n"
+  else
+    PREVIEW="bat --color=always --tabs 2 {} -n"
+  fi
+  # PREVIEW_WINDOW="right:70%:nowrap"
+  PREVIEW_WINDOW="top:70%:nowrap"
+  QUERY=$(get_query)
+  # fzf --query ${QUERY:-""} -1 -0 --exact
+  fzf --preview="$PREVIEW" --preview-window="$PREVIEW_WINDOW" --query ${QUERY:-""} -1 -0 --exact
+}
+
+fzf_simple() {
+  QUERY=$(get_query)
+  fzf --query ${QUERY:-""} -1 -0 --exact
+}
+
+find_project_with_root_identifier() {
+    ROOT_IDENT=$1
+    ROOT_IDENT_TYPE=$2
+    PROJECT_PATH=""
+    while :; do
+        QUERY=$(get_query)
+        QUERY_INDEX=$(($QUERY_INDEX+1))
+        SELECTION=`find . -type $ROOT_IDENT_TYPE -name $ROOT_IDENT | cut -d / -f 2 | uniq | fzf --query ${QUERY:-''} -1 -0`
+        if [ -z $SELECTION ]; then exit ;fi
+        cd $SELECTION
+        PROJECT_PATH="$PROJECT_PATH/$SELECTION"
+        if [ -$ROOT_IDENT_TYPE $ROOT_IDENT ]; then break ;fi
+    done
+    echo $PROJECT_PATH
+}
+
+all_files_in_dir() {
+  RES=
+  SRC=$1
+  cd $SRC
+  for FILE in `find . -type f -printf '%P\n'`; do
+    RES+="$SRC/$FILE "
+  done
+  echo $RES
+}
+
+assert_not_null() {
+  if [ -z $1 ]; then
+    echo "no entry selected"
+    exit 1
+  fi
+}
+
+# set cwd & $SELECTION depending on $PROJECT_TYPE
+case $PROJECT_TYPE in
+  dots)
+    cd $DOTS
+    FILES=
+    FILES+="`all_files_in_dir common/home`\n"
+    hostname=`hostnamectl hostname`
+    FILES+=`all_files_in_dir machines/$hostname/home`
+    SELECTION=`echo -e $FILES | tr ' ' '\n' | fzf_fancy`
+    assert_not_null $SELECTION
+    $EDITOR $SELECTION
+    ;;
+  bin)
+    cd $DOTS/common/home/.local/bin
+    SELECTION=`find . -maxdepth 1 -type f -executable -printf '%P\n' | fzf_fancy`
+    assert_not_null $SELECTION
+    $EDITOR $SELECTION
+    ;;
+  # nvims)
+  #   SESSIONS_DIR=$XDG_DATA_HOME/nvim_data/sessions
+  #   if [ ! -d $SESSIONS_DIR ]; then
+  #     echo "$SESSIONS_DIR is not a directory"
+  #   else
+  #     cd $SESSIONS_DIR
+  #     SELECTION=`find . -path ./.git -prune -o -path ./doc -prune -o -type f -not -name "*.json" -printf '%P\n' | fzf_simple`
+  #     assert_not_null $SELECTION
+  #     nvim -c "SessionLoadCLI $SELECTION"
+  #   fi
+  #   ;;
+  nvimc)
+    cd $XDG_CONFIG_HOME/nvim
+    SELECTION=`find . -path ./.git -prune -o -path ./doc -prune -o -type f -printf '%P\n' | fzf_fancy`
+    assert_not_null $SELECTION
+    $EDITOR $SELECTION
+    ;;
+  nvimp)
+    cd ~/.local/share/nvim/lazy/
+    SELECTION=`ls | fzf_simple`
+    assert_not_null $SELECTION
+    $EDITOR $SELECTION
+    ;;
+  notes)
+    cd ~/desk/notes
+    SELECTION=`find . -type f -printf '%P\n' | fzf_fancy`
+    assert_not_null $SELECTION
+    $EDITOR $SELECTION
+    ;;
+  wines)
+    cd ~/games/executables/windows
+    SELECTION=`find .\
+      -name *.exe -type f\
+      -not -name UnityCrashHandler64.exe\
+      -not -name CaptiveAppEntry.exe\
+      -printf '%P\n' | fzf_simple`
+
+    assert_not_null $SELECTION
+    cd "`dirname "$SELECTION"`"
+    EXE=`basename "$SELECTION"`
+    # bottles -b main -e "./$EXE"
+    bottles-cli run -b main -e "./$EXE"
+    ;;
+
+  # godot)
+    #     cd ~/sectors/godot/
+    #     SELECTION=$(find_project_with_root_identifier project.godot f)
+    #     if [ ! -z $SELECTION ]; then cd ~/sectors/godot/$SELECTION; fi
+    #     ;;
+  *)
+    echo "unknown project type '$PROJECT_TYPE'"
+    ;;
+esac

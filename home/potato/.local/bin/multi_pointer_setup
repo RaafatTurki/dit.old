@@ -1,0 +1,36 @@
+#!/usr/bin/bash
+
+USERNAME_0="john"
+USERNAME_1="doe"
+
+PNT_0="2.4G Mouse"
+KBD_0="Lite-On Technology Corp. Lenovo USB Keyboard System Control"
+# PNT_1="Compx 2.4G Receiver"
+# KBD_1="SONiX USB DEVICE"
+
+xinput create-master $USERNAME_0
+# xinput create-master $USERNAME_1
+
+MASTER_PNT_ID_0=`xinput list --id-only "$USERNAME_0 pointer"`
+SLAVE_PNT_ID_0=`xinput list --id-only "pointer:$PNT_0"`
+
+MASTER_KBD_ID_0=`xinput list --id-only "$USERNAME_0 keyboard"`
+SLAVE_KBD_ID_0=`xinput list --id-only "keyboard:$KBD_0"`
+
+
+# MASTER_PNT_ID_1=`xinput list --id-only "$USERNAME_1 pointer"`
+# SLAVE_PNT_ID_1=`xinput list --id-only "pointer:$PNT_1"`
+
+# MASTER_KBD_ID_1=`xinput list --id-only "$USERNAME_1 keyboard"`
+# SLAVE_KBD_ID_1=`xinput list --id-only "keyboard:$KBD_1"`
+
+# echo $SLAVE_PNT_ID_0
+# echo $SLAVE_KBD_ID_0
+# echo $SLAVE_PNT_ID_1
+# echo $SLAVE_KBD_ID_1
+
+xinput reattach $SLAVE_PNT_ID_0 $MASTER_PNT_ID_0
+xinput reattach $SLAVE_KBD_ID_0 $MASTER_KBD_ID_0
+
+# xinput reattach $SLAVE_PNT_ID_1 $MASTER_PNT_ID_1
+# xinput reattach $SLAVE_KBD_ID_1 $MASTER_KBD_ID_1
