@@ -28,7 +28,7 @@ function fish_prompt
     set -l git_branch "$red$git_branch"
 
     if [ (_is_git_dirty) ]
-      set git_dirty "$normal ●"
+      set git_dirty "$normal •"
     end
 
     set git_info "$git_branch$git_dirty "

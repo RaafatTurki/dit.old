@@ -110,6 +110,7 @@ export GTK2_RC_FILES=$XDG_CONFIG_HOME/gtk-2.0/gtkrc
 export STARSHIP_CACHE=$XDG_CACHE_HOME/starship
 export PARALLEL_HOME=$XDG_CONFIG_HOME/parallel
 export XINITRC=$XDG_CONFIG_HOME/x11/xinitrc
+export XSERVERRC="$XDG_CONFIG_HOME"/x11/xserverrc
 export ICEAUTHORITY=$XDG_CACHE_HOME/ICEauthority
 # export GNUPGHOME=$XDG_CONFIG_HOME/gnupg
 export CUDA_CACHE_PATH=$XDG_CACHE_HOME/nv
@@ -124,6 +125,9 @@ export GOPATH=$XDG_DATA_HOME/go
 export ANDROID_HOME=/opt/android-sdk/
 export PYTHONSTARTUP=$XDG_CONFIG_HOME/python/pythonrc
 export GRADLE_USER_HOME=$XDG_DATA_HOME/gradle
+export NUGET_PACKAGES="$XDG_CACHE_HOME"/NuGetPackages
+export OMNISHARPHOME="$XDG_CONFIG_HOME"/omnisharp
+export W3M_DIR="$XDG_DATA_HOME"/w3m
 # export RUST_SRC_PATH=$RUSTUP_HOME/toolchains/nightly-$(uname -m)-unknown-linux-gnu/lib/rustlib/src/rust/src
 
 
@@ -136,7 +140,8 @@ fi
 
 # Autostart tbsm on tty 1
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
-  startx $XINITRC
+  # no exec because we want to keep the tty console alive
+  startx
   # ./hypr.sh
 else
   # setfont /usr/share/kbd/consolefonts/ter-v18n.psf.gz

@@ -38,7 +38,7 @@ GARBAGE=(
 ~/.urserver
 ~/.viminfo
 ~/.wget-hsts
-~/.wine
+# ~/.wine
 ~/.yarn
 ~/.yarnrc
 ~/.zoom

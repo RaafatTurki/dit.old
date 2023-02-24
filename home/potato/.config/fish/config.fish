@@ -22,6 +22,7 @@ if status is-interactive
   alias x="chmod +x"
   # alias win="bottles-cli run -b main -e"
   alias aa="paru"
+  alias gg='gitui'
   alias home="cd ~"
   alias dots="cd $DOTS"
   alias nivm="nvim"
@@ -45,7 +46,9 @@ if status is-interactive
   alias get-mime='xdg-mime query filetype'
   alias journal-boot='sudo journalctl -p 3 -b --no-pager'
   # alias hx='helix'
-  alias lspci-fzf="lspci | fzf --preview-window='top:50%:nowrap' --preview=\"echo {} | grep -o '[0-9a-zA-Z][0-9a-zA-Z]:[0-9a-zA-Z][0-9a-zA-Z]\.[0-9a-zA-Z]' | xargs -I{} lspci -vvv -s {}\""
+  alias lspci-fzf="lspci | fzf --preview-window='top:50%:nowrap' --preview=\"echo {} | grep -o '[0-9a-zA-Z][0-9a-zA-Z]:[0-9a-zA-Z][0-9a-zA-Z]\.[0-9a-zA-Z]' | xargs -I[] lspci -k -s [] | grep -z --color=always -e '[0-9a-zA-Z][0-9a-zA-Z]:[0-9a-zA-Z][0-9a-zA-Z]\.[0-9a-zA-Z]'\""
+  # alias lspci-fzf="lspci | fzf --preview-window='top:50%:nowrap' --preview=\"echo {} | grep -o '[0-9a-zA-Z][0-9a-zA-Z]:[0-9a-zA-Z][0-9a-zA-Z]\.[0-9a-zA-Z]' | xargs -I{} lspci -k -s {}\""
+  # alias lspci-fzf="lspci | fzf --preview-window='top:50%:nowrap' --preview=\"echo asd dsa asdasd | grep --color=always -z asd\""
   # alias grep_pcia='grep -z -E "[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}\.[0-9A-Fa-f]"'
   # lspci | fzf --preview="echo {} | grep -o '[0-9a-zA-Z][0-9a-zA-Z]:[0-9a-zA-Z][0-9a-zA-Z]\.[0-9a-zA-Z]' | xargs -I{} lspci -nn -vvv -s {}"
 
@@ -127,14 +130,13 @@ if status is-interactive
   alias get-audio='youtube-dl --extract-audio -f bestaudio'
   alias get-video='youtube-dl -f bestvideo+bestaudio'
   # alias get-video='youtube-dl -f best '
-  alias nv='devour neovide --multiGrid --disowned'
   # alias screen_key='screenkey -s small -p fixed -g 500x80+1420+1000 --opacity .5 --font Terminus --no-systray -t 0.5'
-  alias lg='lazygit'
-  alias xe='Xephyr -br -ac -noreset -screen 1900x1000 :2'
-  alias xe-run='DISPLAY=:2'
-  alias x11vnc='x11vnc -nevershared -xkb -wait 20 -noxdamage -forever -noxcomposite -rfbauth ~/.config/x11/x11vnc_pass'
-  alias x11vnc-set-pass='x11vnc -storepasswd .config/x11/x11vnc_pass'
-  alias cava-mpd='cava -p ~/.config/cava/config_mpd'
+  # alias nv='devour neovide --multiGrid --disowned'
+  # alias xe='Xephyr -br -ac -noreset -screen 1900x1000 :2'
+  # alias xe-run='DISPLAY=:2'
+  # alias x11vnc='x11vnc -nevershared -xkb -wait 20 -noxdamage -forever -noxcomposite -rfbauth ~/.config/x11/x11vnc_pass'
+  # alias x11vnc-set-pass='x11vnc -storepasswd .config/x11/x11vnc_pass'
+  # alias cava-mpd='cava -p ~/.config/cava/config_mpd'
 
   # python
   alias pip-install-req='pip install -r requirements.txt'
@@ -146,10 +148,6 @@ if status is-interactive
 
   # android
   alias create-android-debugstore='keytool -keyalg RSA -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -validity 9999 -deststoretype pkcs12'
-
-  alias dit='/usr/bin/git --git-dir=$HOME/.dit/ --work-tree=/'
-  alias lgd='lg -g ~/.dit'
-  alias dree='dit ls-files | tree --fromfile'
 
   # pip fish completion start
   # function __fish_complete_pip
@@ -198,7 +196,7 @@ if test (command -v gping)
 end
 
 if test (command -v duf)
-  alias df='duf'
+  alias df='duf -hide special'
 end
 
 # pnpm

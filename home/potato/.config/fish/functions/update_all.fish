@@ -56,8 +56,8 @@ function update_all
   title "Updating Fish Completions"
   fish_update_completions
 
-  title "Rebuilding Font Cache Files"
-  fc-cache -frv
+  # title "Rebuilding Font Cache Files"
+  # fc-cache -frv
 
   title "Check For failed services"
   systemctl --failed
