@@ -7,8 +7,8 @@
 
 H="24"                  # height
 FN="Terminus"           # font name
-FG=`xgetres g.fg`     # foreground color
-BG=`xgetres g.bg`     # background color
+FG=$(xgetres .fg)       # foreground color
+BG=$(xgetres .bg)       # background color
 INT=0.5                 # global clock interval (seconds)
 S="    "                # spacer between modules
 

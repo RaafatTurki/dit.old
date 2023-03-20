@@ -141,7 +141,7 @@ fi
 # Autostart tbsm on tty 1
 if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
   # no exec because we want to keep the tty console alive
-  startx
+  xinit
   # ./hypr.sh
 else
   # setfont /usr/share/kbd/consolefonts/ter-v18n.psf.gz

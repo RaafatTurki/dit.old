@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
 FONT="$(xgetres g.fn_tui):pixelsize=$(xgetres g.fs_tui)"
-BG=$(xgetres g.bg)
-FG=$(xgetres g.sel)
+BG=$(xgetres .bg)
+FG=$(xgetres .color15)
 TIME=${2:-1}
 
 PIDS=$(pgrep umess)

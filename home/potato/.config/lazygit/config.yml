@@ -1,1 +1,44 @@
-../../dots/common/home/.config/lazygit/config.yml
+gui:
+  sidePanelWidth: 0.5
+  expandFocusedSidePanel: true
+  theme:
+    lightTheme: false
+    activeBorderColor:
+      - white
+      - bold
+    inactiveBorderColor:
+      - '#294374'
+    optionsTextColor:
+      - blue
+    selectedLineBgColor:
+      - default
+    selectedRangeBgColor:
+      - blue
+    cherryPickedCommitBgColor:
+      - blue
+    cherryPickedCommitFgColor:
+      - cyan
+  commitLength:
+    show: true
+  showFileTree: true
+  showRandomTip: false
+  showCommandLog: false
+  authorColors: # in case you're not happy with the randomly assigned colour
+    'Raafat Turki': '#294374'
+git:
+  paging:
+    colorArg: always
+    pager: diff-so-fancy
+
+# git:
+#   paging:
+#     colorArg: always
+#     pager: delta --dark --paging=never
+
+#   paging:
+#     colorArg: always
+#     pager: diff-so-fancy
+    # pager: difft
+    # useConfig: true
+    # usingGpg: true
+    # overrideGpg: true

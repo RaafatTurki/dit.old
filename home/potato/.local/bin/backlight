@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 
-DDC_DEV=dev:/dev/i2c-0
+DDC_DEV=dev:/dev/i2c-1
 
-_get_protocol() {
+get_protocol() {
   # if [[ -e /sys/class/backlight/* ]]; then
   if find /sys/class/backlight -mindepth 1 -maxdepth 1 | read; then
     echo "ACPI"
@@ -13,7 +13,7 @@ _get_protocol() {
 }
 
 change() {
-  protocol=`_get_protocol`
+  protocol=`get_protocol`
   # echo "Using $protocol"
 
   case "$protocol" in
@@ -30,7 +30,7 @@ change() {
 }
 
 get() {
-  protocol=`_get_protocol`
+  protocol=`get_protocol`
   # echo "Using $protocol"
 
   case "$protocol" in

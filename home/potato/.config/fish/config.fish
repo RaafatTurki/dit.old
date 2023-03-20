@@ -25,7 +25,6 @@ if status is-interactive
   alias gg='gitui'
   alias home="cd ~"
   alias dots="cd $DOTS"
-  alias nivm="nvim"
   alias env="env | sort"
   alias neo="neofetch"
   alias jctl="journalctl -p 3 -xb"
@@ -161,8 +160,9 @@ if status is-interactive
   # complete -fa "(__fish_complete_pip)" -c pip
   # pip fish completion end
 
+  # SESSIONS_PATH=$(nvim --headless -c 'lua print(Sessions.sessions_path) vim.cmd.quit()')
+  # echo $SESSIONS_PATH
 
-  # set db_lock_file "/var/lib/pacman/db.lck"
   set nvim_sessions_dir ~/.local/share/nvim/session/
   if test -d $nvim_sessions_dir && test (command -v nvims)
     complete -f -c nvims -a (find $nvim_sessions_dir -printf '%P\n' | sed -e 's/\.json//' | xargs)
@@ -191,9 +191,9 @@ end
 #   alias find='fd'
 # end
 
-if test (command -v gping)
-  alias ping='gping'
-end
+# if test (command -v gping)
+#   alias ping='gping'
+# end
 
 if test (command -v duf)
   alias df='duf -hide special'

@@ -1,7 +1,0 @@
-#!/bin/bash
-
-PID=`xdotool getwindowfocus getwindowpid`
-ENV=`strings /proc/$PID/environ | grep PWD`
-
-cd $PWD
-$TERMINAL &

@@ -13,9 +13,11 @@ hc emit_hook reload
 gsettings set org.gnome.desktop.interface color-scheme prefer-dark
 xsetroot -solid '#0D0E15'
 xwallpaper --zoom ~/media/pics/wallpapers/21.png
-xres_manage gen
-xres_manage load
-xmodmap ~/.config/x11/xmodmap
+# xres_manage gen
+# xres_manage load
+# xmodmap ~/.config/x11/xmodmap.d/$(hostnamectl hostname)
+$XDG_CONFIG_HOME/x11/xres/load
+$XDG_CONFIG_HOME/x11/xmodmap/load
 
 xset m 20/10 10
 xset r rate 300 30
@@ -41,9 +43,8 @@ hc keybind $Mod-Shift-r reload
 hc keybind $Mod-q close
 
 hc keybind $Mod-Return spawn term launch
-hc keybind $Mod-Shift-Prior spawn env TERM=xst-256color term zoom 1
-hc keybind $Mod-Shift-Next spawn env TERM=xst-256color term zoom -1
-
+# hc keybind $Mod-Shift-Prior spawn env TERM=xst-256color term zoom 1
+# hc keybind $Mod-Shift-Next spawn env TERM=xst-256color term zoom -1
 hc keybind $Mod-d spawn rofi -show drun
 hc keybind $Mod-e spawn $FM
 hc keybind $Mod+KP_Enter spawn $FM trash:///
@@ -290,7 +291,7 @@ launch_once thunar        thunar --daemon
 launch_once shortsig      shortsig
 launch_once jellyfin      /usr/lib/jellyfin/bin/jellyfin --webdir=/usr/share/jellyfin/web
 launch_once syncthing     syncthing serve --no-browser --no-restart --logflags=0
-launch_once barriers      barriers -f -c .config/barrier/config.conf --disable-crypto
+# launch_once barriers      barriers -f -c .config/barrier/config.conf --disable-crypto
 launch_once alttab        alttab -w 1 -d 2 -t 256x128 -i 48x48 -bg '#0D0E15' -fg '#F1F7ED' -frame '#F1F7ED' -inact '#294374' -font 'xft:Terminus'
 launch_once syncthing-gtk syncthing-gtk -m
 
@@ -317,11 +318,6 @@ launch_once syncthing-gtk syncthing-gtk -m
 # pgrep alttab || alttab -w 1 -d 2 -t 256x128 -i 48x48 -bg '#0D0E15' -fg '#F1F7ED' -frame '#F1F7ED' -inact '#294374' -font 'xft:Terminus' &
 
 
-
-
-
-
-
-hc set window_border_active_color `xgetres g.sel`
-hc set window_border_urgent_color `xgetres g.warn`
+hc set window_border_active_color `xgetres .fg`
+hc set window_border_urgent_color `xgetres .color11`
 hc set window_border_width 1

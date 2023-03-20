@@ -6,7 +6,9 @@
 ! st.borderless:                    1
 
 ! USR1 signal reloadable
-st.font:						              FN_TUI:pixelsize=FS_TUI:antialias=false:autohint=true
+! st.font:						              FN_TUI:pixelsize=FS_TUI:antialias=false:autohint=true
+st.font:						              FN_GUI:pixelsize=FS_GUI:antialias=false:autohint=true
+! st.font2:						              Noto Color Emoji:pixelsize=FS_TUI:antialias=false:autohint=true
 ! st.font:						              Fira Code:pixelsize=FS_TUI
 
 ! st.font:						              FN_TUI:pixelsize=FS_TUI

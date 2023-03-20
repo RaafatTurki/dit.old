@@ -1,0 +1,13 @@
+! vim: filetype=xdefaults:commentstring=!%s
+
+#include "vars"
+#include "x"
+#include "colors"
+#include "st"
+#include "zutty"
+
+! #include "/home/potato/.config/x11/xres/xres.d/vars"
+! #include "/home/potato/.config/x11/xres/xres.d/x"
+! #include "/home/potato/.config/x11/xres/xres.d/colors"
+! #include "/home/potato/.config/x11/xres/xres.d/st"
+! #include "/home/potato/.config/x11/xres/xres.d/zutty"
