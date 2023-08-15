@@ -1,8 +1,0 @@
-^sep()
-Exit,       ^checkout(exit),        system-shutdown-symbolic
-^tag(exit)
-Test,       notify-send "hi there", system-suspend-symbolic
-Quit,       bspc quit,              system-log-out-symbolic
-Suspend,    systemctl -i suspend,   system-suspend-symbolic
-Reboot,     systemctl -i reboot,    system-reboot-symbolic
-Poweroff,   systemctl -i poweroff,  system-shutdown-symbolic

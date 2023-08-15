@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-~/.config/lemonbar/main | lemonbar -n barr -f Terminus
