@@ -1,0 +1,30 @@
+#!/bin/bash
+
+GIT_DIR="$HOME/.dit"
+WORK_TREE="/"
+
+if [ -z "$1" ]
+then
+  if ! command -v gitui > /dev/null
+  then
+    echo "gitui is not installed on this system"
+    return 1
+  fi
+  # gitui --watcher -d "$HOME/.dit" -w "$HOME"
+  gitui -l -d "$HOME/.dit" -w "$HOME"
+elif [ "$1" = "tree" ]
+then
+  if ! command -v git > /dev/null
+  then
+    echo "git is not installed on this system"
+    return 1
+  fi
+  git --git-dir="$GIT_DIR" --work-tree="$WORK_TREE" ls-files | tree --fromfile
+else
+  if ! command -v git > /dev/null
+  then
+    echo "git is not installed on this system"
+    return 1
+  fi
+  git --git-dir="$GIT_DIR" --work-tree="$WORK_TREE" "$@"
+fi

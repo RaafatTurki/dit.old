@@ -1,0 +1,55 @@
+#!/usr/bin/bash
+
+display() {
+  sleep_duration=$1
+  shift
+  message=$@
+
+  umess-send $sleep_duration $message
+}
+
+display-volume() {
+  mute_status=$(pamixer --get-mute)
+  audio_icon=''
+
+  if [ "$mute_status" = "true" ]; then
+    audio_icon=''
+  fi
+
+  display 1 $audio_icon $(pamixer --get-volume)%
+}
+
+case $1 in
+  time)
+    display 1 $(date '+%a %d %b %I:%M:%S %p')
+    ;;
+  bat)
+    display 1 $(acpi)
+    ;;
+  b+)
+    wm-backlight change 10%+
+    display 1 󰃠 $(wm-backlight get)%
+    ;;
+  b-)
+    wm-backlight change 10%-
+    display 1 󰃠 $(wm-backlight get)%
+    ;;
+  v+)
+    pamixer -i 10 --allow-boost --set-limit 300
+    display-volume
+    ;;
+  v-)
+    pamixer -d 10 --allow-boost --set-limit 300
+    display-volume
+    ;;
+  mute)
+    pamixer --toggle-mute
+    display-volume
+    ;;
+  kbd)
+    display 1 󰌌 $(wm-xkbd)
+    ;;
+  # hlwm-ws)
+  #   STRING=`herbstclient tag_status ${DISPLAY:1}`
+  #   ;;
+esac

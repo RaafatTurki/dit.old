@@ -1,0 +1,153 @@
+#!/usr/bin/bash
+
+SAVE_PATH_SS="`xdg-user-dir PICTURES`/sshot"
+TMP_PNG_PATH=/tmp/scrscn.png
+MAIM_FLAGS="--hidecursor --quality 1 -s --bordersize 2 -c 1,1,1,1 $TMP_PNG_PATH"
+# FSWEBCAM_FLAGS="--no-banner $TMP_PNG_PATH"
+
+mkdir -p $SAVE_PATH_SS
+mkdir -p `dirname $TMP_PNG_PATH`
+
+sound_beep() {
+  echo -e "\a"
+}
+
+# prompt user to take the screenshot
+ss_capture_prompt() {
+  maim $MAIM_FLAGS
+  # beep if screenshot was taken
+  if [ $? -ne 0 ]; then exit 1; fi
+  sound_beep
+}
+
+# copy to clipboard
+ss_clip() {
+  cat $TMP_PNG_PATH | xclip -selection clip -t image/png
+  cat $TMP_PNG_PATH | xclip -t image/png
+}
+
+# save image to $SAVE_PATH_SS
+ss_save() {
+  cp $TMP_PNG_PATH "$SAVE_PATH_SS/`date +%s`.png"
+}
+
+# returns any decoded text from the image (barcode, qrcode)
+ss_decode() {
+  echo `zbarimg -q --raw $TMP_PNG_PATH`
+}
+
+# cam_capture() {
+#   fswebcam $FSWEBCAM_FLAGS
+#   # beep if screenshot was taken
+#   if [ $? -ne 0 ]; then exit 1; fi
+#   sound_beep
+# }
+
+
+
+ss_ocr() {
+  echo `tesseract -l eng $TMP_PNG_PATH stdout 2>/dev/null`
+  # echo `tesseract -l ara $TMP_PNG_PATH stdout 2>/dev/null`
+  # echo `tesseract -l rus $TMP_PNG_PATH stdout 2>/dev/null`
+}
+
+clip() {
+  ss_capture_prompt
+  ss_clip
+}
+
+save() {
+  ss_capture_prompt
+  ss_clip
+  ss_save
+}
+
+decode() {
+  ss_capture_prompt
+  res=`ss_decode`
+
+  # check if any decodeding result was found
+  if [ -z "$res" ]; then
+    notify-send "scrscn" "No QR detected"
+    exit 1
+  else
+    notify-send "scrscn" "QR Code decoded:\n\n$res"
+    printf %b "$res" | xclip -selection clip
+  fi
+
+}
+
+ocr() {
+  ss_capture_prompt
+  res=`ss_ocr`
+
+  # check if any ocr result was found
+  if [ -z "$res" ]; then
+    notify-send "scrscn" "No text detected"
+    exit 1
+  else
+    notify-send "scrscn" "Text decoded:\n\n$res"
+    printf %b "$res" | xclip -selection clip
+  fi
+}
+
+
+
+dep_check() {
+  cmd=$1
+  opt=${2:-true}
+  msg="Missing dependency '$cmd'"
+
+  type -p "$cmd" &>/dev/null || {
+    notify-send "Scrscn" "$msg"
+    echo "$msg"
+    if $opt ; then exit 2 ; fi
+  }
+}
+
+help() {
+	cat <<-EOF
+Usage: scrscn COMMAND [ARGS...]
+
+Commands:
+
+    clip              Take a screenshot and save it into clipboard
+    save              Take a screenshot and save into ~/Pictures/screenshots
+    decode            Take a screenshot and save its decoded content into clipboard (qrcodes and barcodes)
+    ocr               Take a screenshot and save its ocr content into clipboard (english)
+    help              Print this help text.
+EOF
+}
+
+default() {
+  clip
+}
+
+main() {
+  if [ $# -eq 0 ]; then
+    default
+    exit 0
+  fi
+
+  cmd="$1"
+  shift
+
+  case "$cmd" in
+    clip|save|decode|ocr|help)
+      "$cmd" "$@"
+      ;;
+    *)
+      echo "Unknown command $cmd"
+      help
+      exit 2
+  esac
+}
+
+dep_check maim
+dep_check xclip
+dep_check xdg-user-dir
+dep_check notify-send false
+dep_check zbarimg false
+dep_check tesseract false
+
+main "$@"

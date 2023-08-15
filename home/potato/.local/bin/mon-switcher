@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+intern=eDP-1
+extern=HDMI-1-0
+# intern=eDP
+# extern=HDMI-A-1-0
+
+# xrandr --output $intern --auto --mode 1440x900
+# xrandr --output $extern --right-of $intern
+
+# xrandr --output HDMI-A-1-0 --auto --mode 2560x1440 --right-of eDP-1
+
+# xrandr --output $extern --auto --mode 2560x1440 --right-of $intern
+# xrandr --output $extern --auto --right-of $intern
+# xrandr --output $extern --auto --right-of $intern
+
+# xrandr --output "$intern" --auto --mode 1440x900 --output "$extern" --auto --right-of "$intern"
+
+# xrandr --output "$intern" --auto --mode 1440x900
+# xrandr --output "eDP-1" --auto --mode 1440x900
+# xrandr --output "eDP" --auto --mode 1440x900
+
+# xrandr --output "$extern" --auto --mode 1440x900 --rate 120 --same-as "$intern"
+# xrandr --output "$extern" --auto --right-of "$intern"
+
+# if xrandr | grep "$extern disconnected"; then
+#   xrandr --output "$extern" --off
+#   # xrandr --output "$extern" --off --output "$intern" --auto --mode 1440x900
+# else
+#   xrandr --output "$intern" --off --output "$extern" --auto
+#   # xrandr --output "$extern" --auto --right-of "$intern"
+# fi
+
+# TODO: extract into `wm_control realod`
+# herbstclient reload

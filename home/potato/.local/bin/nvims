@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+session_path=""
+is_mode_neovide=false
+
+usage() {
+  echo "Usage: nvims [OPTIONS] [SESSION_PATH]"
+  echo "Options:"
+  echo "  -n, --neo         Launch with neovide"
+  echo "  -h, --help        Display this help message"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -n|--neo)
+      is_mode_neovide=true
+      shift
+      ;;
+    -s|--search)
+      # if command -v "fd" &>/dev/null; then
+        # session_path=$(fd -H -t f .venom.json "$HOME" | xargs -I{} dirname "{}" | fzf)
+      if command -v "find" &>/dev/null; then
+        session_path=$(find "$HOME/sectors" -name '.venom.json' -type f -exec dirname "{}" \; | fzf)
+      else
+        echo "no find command exists (fd, find)"
+      fi
+
+      if [ -z "$session_path" ]; then
+        echo "No sesision path is provided"
+        exit 1
+      fi
+
+      shift
+      ;;
+    *)
+      if [[ $1 == -* ]]; then
+        echo "Error: Unrecognized option '$1'"
+        usage
+        exit 1
+      else
+        session_path="$1"
+        shift
+      fi
+      ;;
+  esac
+done
+
+cd "$session_path"
+
+if [[ "$is_mode_neovide" == "true" ]]; then
+  if command -v "neovide" &>/dev/null; then
+    devour neovide --multigrid --novsync --nofork -- -c "SessionLoad"
+  else
+    echo "neovide doesn't exists"
+  fi
+else
+  nvim -c "SessionLoad"
+fi
